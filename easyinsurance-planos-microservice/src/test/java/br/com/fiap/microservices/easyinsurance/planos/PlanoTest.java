@@ -8,8 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,8 @@ import br.com.fiap.microservices.easyinsurance.planos.enuns.Abrangencia;
 import br.com.fiap.microservices.easyinsurance.planos.enuns.Comercializacao;
 import br.com.fiap.microservices.easyinsurance.planos.enuns.TipoContratacao;
 import br.com.fiap.microservices.easyinsurance.planos.model.PlanoRepository;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -70,6 +71,7 @@ public class PlanoTest {
     
     @Test
     public void criando_novo_plano_retorno() throws Exception{
+    	restTemplate.delete(BASE_URL);
     	Plano plano1 = new Plano();
        	plano1.setCodigoPlanoANS(485662207L);
     	plano1.setNomePlano("Absoluto ADM Nacional ADS - A (EA)");
@@ -83,7 +85,7 @@ public class PlanoTest {
     
     
     
-    @Ignore
+    @Test
     public void buscar_plano() throws Exception {
     	String response = restTemplate.getForObject(BASE_URL + "/findAll", String.class);
     	List<Plano> planos = mapper.readValue(response, mapper.getTypeFactory().constructCollectionLikeType(List.class, Plano.class));
@@ -95,11 +97,24 @@ public class PlanoTest {
     }
     
     
-    @Ignore
-    public void buscar_plano_id_inexistente() throws Exception {
-    	//mockMvc.perform(get(BASE_URL+"/1")).andExpect(status().isNotFound());
+    @Test
+    public void atualizando_plano() throws IOException{
+    	String response = restTemplate.getForObject(BASE_URL + "/findAll", String.class);
+        List<Plano> planos = mapper.readValue(response, mapper.getTypeFactory().constructCollectionType(List.class, Plano.class));
+        
+        Plano plano2 = restTemplate.getForObject(BASE_URL + "/" + planos.get(1).getCodigoPlanoANS(), Plano.class);
+    	plano2.setCodigoPlanoANS(485662207L);
+    	plano2.setTipoContratacao(TipoContratacao.COLETIVO_POR_ADESAO);
+    	plano2.setComercializacao(Comercializacao.SUSPENSA_PELA_ANS);
+    	plano2.setCobertura("Hospitalar");
+        restTemplate.put(BASE_URL, plano2);
+        
+        Plano plano3 = restTemplate.getForObject(BASE_URL + "/" + planos.get(1).getCodigoPlanoANS(), Plano.class);
+        assertNotNull(plano3);
+    	assertEquals(485662207l, plano3.getCodigoPlanoANS().longValue());
+    	assertEquals(Comercializacao.LIBERADA, plano3.getComercializacao());
+        
     }
-    
     
     
     
