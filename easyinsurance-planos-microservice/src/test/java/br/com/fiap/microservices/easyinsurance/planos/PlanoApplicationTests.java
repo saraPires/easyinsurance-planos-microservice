@@ -1,10 +1,7 @@
 package br.com.fiap.microservices.easyinsurance.planos;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -19,6 +16,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonParseException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 
@@ -37,12 +36,14 @@ public class PlanoApplicationTests {
 	     
 	    @LocalServerPort
 	    int randomServerPort;
+	    
+	    
 	 
 	    @Test
 	    public void testeCriandoPlano() throws URISyntaxException 
 	    {
-	        final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
-	        URI uri = new URI(baseUrl);
+	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
+	    	URI uri = new URI(baseUrl);
 	    	Plano plano = new Plano();
 	       	plano.setCodigoPlanoANS(7393L);
 	    	plano.setNomePlano("A R CONTABILIDADE LTDA");
@@ -64,7 +65,7 @@ public class PlanoApplicationTests {
 	    @Test
 	    public void testeCriandoPlanoValoresNulos() throws URISyntaxException 
 	    {
-	        final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
+	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
 	        URI uri = new URI(baseUrl);
 	    	Plano plano = new Plano();
 	       	plano.setCodigoPlanoANS(null);
@@ -87,7 +88,6 @@ public class PlanoApplicationTests {
 	    
 	    @Test
 	    public void testeConsultarPlanosServico() throws URISyntaxException {
-	    	
 	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
 	    	ResponseEntity<String> result = this.restTemplate.getForEntity(baseUrl, String.class);
 	    	assertEquals(result.getStatusCodeValue(), HttpStatus.SC_OK);
@@ -95,12 +95,9 @@ public class PlanoApplicationTests {
 	    
 	    @Test
 	    public void testeConsultarUnicoPlano() throws URISyntaxException {
-	    	
 	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
 	    	ResponseEntity<String> result = this.restTemplate.getForEntity(baseUrl + "/1", String.class);
 	    	assertEquals(result.getStatusCodeValue(), HttpStatus.SC_OK);
 	    }
-
-	    
-	    
+    
 }
