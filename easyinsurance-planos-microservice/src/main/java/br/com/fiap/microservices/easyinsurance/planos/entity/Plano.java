@@ -1,5 +1,6 @@
 package br.com.fiap.microservices.easyinsurance.planos.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,15 +16,18 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name="tb_plano")
 public class Plano {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
+    @Column(nullable = false)
     @JsonProperty("codigoPlanoANS")
     private Long codigoPlanoANS;
     
+    @Column(nullable = false)
     @JsonProperty("nomePlano")
     private String nomePlano;
     
@@ -32,10 +36,12 @@ public class Plano {
 
     @JsonProperty("comercializacao")
     private Comercializacao comercializacao;
-
+    
+    @Column(nullable = false)
     @JsonProperty("cobertura")
     private String cobertura;
-
+    
+    @Column(nullable = false)
     @JsonProperty("abrangencia")
     private Abrangencia abrangencia;
 
