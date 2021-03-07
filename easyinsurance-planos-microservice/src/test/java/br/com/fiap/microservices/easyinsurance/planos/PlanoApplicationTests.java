@@ -38,7 +38,7 @@ public class PlanoApplicationTests {
 	    @LocalServerPort
 	    int randomServerPort;
 	 
-	    @Ignore
+	    @Test
 	    public void testeCriandoPlano() throws URISyntaxException 
 	    {
 	        final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
@@ -61,7 +61,7 @@ public class PlanoApplicationTests {
 	        assertEquals(201, result.getStatusCodeValue());
 	    }
 	     
-	    @Ignore
+	    @Test
 	    public void testeCriandoPlanoValoresNulos() throws URISyntaxException 
 	    {
 	        final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
@@ -86,14 +86,21 @@ public class PlanoApplicationTests {
 	    }
 	    
 	    @Test
-	    public void testeConsultarPlanosVazio() throws URISyntaxException {
+	    public void testeConsultarPlanosServico() throws URISyntaxException {
 	    	
 	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
 	    	ResponseEntity<String> result = this.restTemplate.getForEntity(baseUrl, String.class);
-	    	assertEquals(result.getStatusCodeValue(), equalTo(HttpStatus.SC_OK));
+	    	assertEquals(result.getStatusCodeValue(), HttpStatus.SC_OK);
 	    }
 	    
-	    
+	    @Test
+	    public void testeConsultarUnicoPlano() throws URISyntaxException {
+	    	
+	    	final String baseUrl = "http://localhost:"+randomServerPort+"/easyinsurance/plano";
+	    	ResponseEntity<String> result = this.restTemplate.getForEntity(baseUrl + "/1", String.class);
+	    	assertEquals(result.getStatusCodeValue(), HttpStatus.SC_OK);
+	    }
+
 	    
 	    
 }
